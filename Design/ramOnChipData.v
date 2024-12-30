@@ -38,7 +38,7 @@
 `timescale 1 ps / 1 ps
 // synopsys translate_on
 module ramOnChipData #(parameter ramSize = 1024,
-              parameter ramWide = 32,//dummy values
+              parameter ramWide = 32, // dummy values
               parameter ramAddrWide = $clog2(ramSize) 
   )
   (
@@ -68,29 +68,30 @@ module ramOnChipData #(parameter ramSize = 1024,
 	wire [ramWide-1:0] q = sub_wire0[ramWide-1:0];
 
 	altsyncram	altsyncram_component (
+				.wren_a (wren),
+				.wren_b (1'b0),
+				.rden_a (1'b1),
+				.rden_b (1'b1),
+				.data_a (data),
+				.data_b ({ramWide{1'b1}}),
 				.address_a (wadd),
 				.address_b (radd),
 				.clock0 (clk),
-				.data_a (data),
-				.wren_a (wren),
-				.q_b (sub_wire0),
-				.aclr0 (1'b0),
-				.aclr1 (1'b0),
-				.addressstall_a (1'b0),
-				.addressstall_b (1'b0),
-				.byteena_a (1'b1),
-				.byteena_b (1'b1),
 				.clock1 (1'b1),
 				.clocken0 (1'b1),
 				.clocken1 (1'b1),
 				.clocken2 (1'b1),
-				.clocken3 (1'b1),
-				.data_b ({ramWide{1'b1}}),
-				.eccstatus (),
+				.clocken3 (1'b1),	
+				.aclr0 (1'b0),
+				.aclr1 (1'b0),
+				.byteena_a (1'b1),
+				.byteena_b (1'b1),
+				.addressstall_a (1'b0),
+				.addressstall_b (1'b0),
 				.q_a (),
-				.rden_a (1'b1),
-				.rden_b (1'b1),
-				.wren_b (1'b0));
+				.q_b (sub_wire0),
+				.eccstatus ()
+				);
 	defparam
 		altsyncram_component.address_aclr_b = "NONE",
 		altsyncram_component.address_reg_b = "CLOCK0",
