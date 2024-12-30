@@ -22,6 +22,7 @@
 --		This code may be used for educational and non-educational purposes as 
 --		long as its copyright notice remains unchanged. 
 ------------------------------------------------------------------------------*/
+`timescale 1 ns / 1 ps
 
 module Memoria32 
     (input  wire  [31:0]raddress,
