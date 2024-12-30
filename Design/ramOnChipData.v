@@ -37,8 +37,8 @@
 // synopsys translate_off
 `timescale 1 ps / 1 ps
 // synopsys translate_on
-module ramOnChipData #(parameter ramSize,
-              parameter ramWide,
+module ramOnChipData #(parameter ramSize = 1024,
+              parameter ramWide = 32,//dummy values
               parameter ramAddrWide = $clog2(ramSize) 
   )
   (
