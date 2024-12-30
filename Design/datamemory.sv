@@ -59,7 +59,7 @@ module datamemory #(
     if (MemRead) begin
       case (Funct3)
         3'b000:  //LB
-        rd = {Dataout[7] ? 24'hFFFFFF : 24'b0, Dataout[7:0]};
+        rd <= {Dataout[7] ? 24'hFFFFFF : 24'b0, Dataout[7:0]};
         3'b001:  //LH
         rd <= {Dataout[15] ? 16'hFFFF : 16'b0, Dataout[15:0]};
         3'b010:  //LW
