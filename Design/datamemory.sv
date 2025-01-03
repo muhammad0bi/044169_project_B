@@ -1,59 +1,41 @@
 `timescale 1ns / 1ps
-//////////////////////////////////////////////////////////////////////////////////
-// Company: 
-// Engineer: Yifan Xu
-// 
-// Create Date: 01/07/2018 10:10:33 PM
-// Design Name: 
-// Module Name: Datamemory
-// Project Name: 112L_Single_Path
-// Target Devices: 
-// Tool Versions: 
-// Description: 
-// 
-// Dependencies: 
-// 
-// Revision: 0.03 - Sign Extension Fixed
-// Revision: 0.03 - Minor Bug Fixed
-// Revision: 0.02 - Add support for sb,sh,lb,lh
-// Revision: 0.01 - File Created
-// Additional Comments:
-// 
-//////////////////////////////////////////////////////////////////////////////////
 
 module datamemory #(
     parameter DM_ADDRESS = 9,
     parameter DATA_W = 32
 ) (
     input logic clk,
+    input logic enable_debug,
     input logic MemRead,  // comes from control unit
     input logic MemWrite,  // Comes from control unit
     input logic [DM_ADDRESS - 1:0] a,  // Read / Write address - 9 LSB bits of the ALU output
     input logic [DATA_W - 1:0] wd,  // Write Data
+    input logic [DATA_W - 1:0] wd2,  // Write Data - used in debug to speed up mem init
     input logic [2:0] Funct3,  // bits 12 to 14 of the instruction
     output logic [DATA_W - 1:0] rd  // Read Data
 );
 
-  logic [31:0] raddress;
-  logic [31:0] waddress;
-  logic [31:0] Datain;
+  logic [31:0] address;
+  logic [31:0] Datain1;
+  logic [31:0] Datain2; // used in debug to speed up mem init
   logic [31:0] Dataout;
   logic [ 3:0] Wr;
 
   Memoria32Data mem32 (
-      .raddress(raddress),
-      .waddress(waddress),
-      .Clk(~clk),
-      .Datain(Datain),
+      .address(address),
+      .Clk(clk),
+      .Datain1(Datain1),
+      .Datain2(Datain2), // used in debug to speed up mem init
       .Dataout(Dataout),
-      .Wr(Wr)
+      .Wr(Wr),
+      .enable_debug(enable_debug)
   );
 
 
   always_comb begin
-    raddress = {{22{1'b0}}, a};
-    waddress = {{22{1'b0}}, a}; //allow wrriting to all adresses
-    Datain = wd;
+    address = {{23{1'b0}}, a}; //allow wrriting to all adresses
+    Datain1 = wd;
+    Datain2 = wd2;
     Wr = 4'b0000;
 
     if (MemRead) begin
@@ -74,15 +56,16 @@ module datamemory #(
       case (Funct3)
         3'b000: begin  //SB
           Wr <= 4'b0001;
-          Datain <={{24{1'b0}}, wd[7:0]};
+          Datain1 <={{24{1'b0}}, wd[7:0]};
         end
         3'b001: begin  //SH
           Wr <= 4'b0011;
-          Datain <= {{16{1'b0}}, wd[15:0]};
+          Datain1 <= {{16{1'b0}}, wd[15:0]};
         end
         default: begin  //SW
           Wr <= 4'b1111;
-          Datain <= wd;
+          Datain1 <= wd;
+          Datain2 <= wd2; //relavinte only when init mem
         end
       endcase
     end

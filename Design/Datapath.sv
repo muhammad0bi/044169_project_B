@@ -1,36 +1,5 @@
 `timescale 1ns / 1ps
-//////////////////////////////////////////////////////////////////////////////////
-// Company: 
-// Engineer: Yifan Xu
-// 
-// Create Date: 03/19/2018 10:10:33 PM
-// Design Name: 
-// Module Name: Datapath
-// Project Name: 112L_PipeLine
-// Target Devices: 
-// Tool Versions: 
-// Description: 
-// 
-// Dependencies: 
-//
-// Revision: 0.14 - Fix Hazard Detection
-// Revision: 0.13 - Fix a Forwarding Unit Bug
-// Revision: 0.12 - ReWrite Branch Unit Logic (Give Flush Signal immediately)
-// Revision: 0.11 - Fix Flush logic (caused by branch)
-// Revision: 0.10 - Add Hazard Detection
-// Revision: 0.09 - Fix a bug that cause Controller delay one stage
-// Revision: 0.08 - Add Forwarding Unit
-// Revision: 0.07 - Fix resmux(input port)
-// Revision: 0.06 - Add Initialization
-// Revision: 0.06 - Fix Port Name/Size
-// Revision: 0.05 - Switch to PipeLine Model, no debug made
-// Revision: 0.04 - Reset WB_DATA Signal
-// Revision: 0.03 - Re-write PC+Imm
-// Revision: 0.02 - modify datamemory
-// Revision: 0.01 - File Created
-// Additional Comments:
-// 
-//////////////////////////////////////////////////////////////////////////////////
+
 import Pipe_Buf_Reg_PKG::*;
 
 module Datapath #(
@@ -41,8 +10,9 @@ module Datapath #(
     parameter DM_ADDRESS = 9, // Data Memory Address
     parameter ALU_CC_W = 4 // ALU Control Code Width
     )(
-    input logic clk , reset , // global clock
+    input logic clk , reset , enable_debug, // global clock
                               // reset , sets the PC to zero
+                              //debug and init mem unit
     RegWrite , MemtoReg ,     // Register file writing enable   // Memory or ALU MUX
     ALUsrc , MemWrite ,       // Register file or Immediate MUX // Memroy Writing Enable
     MemRead ,                 // Memroy Reading Enable
@@ -51,6 +21,16 @@ module Datapath #(
     input logic [1:0] ALUOp ,
     input logic [1:0] RWSel , // Mux4to1 Select
     input logic [ALU_CC_W -1:0] ALU_CC, // ALU Control Code ( input of the ALU )
+	
+    input logic [DM_ADDRESS-1:0]DebugAddress, // debug and init mem unit
+    input logic [DATA_W-1:0]DebugData1, 
+    input logic [DATA_W-1:0]DebugData2, 
+
+    input logic [DM_ADDRESS-1:0]debug_inst_addr, // debug and init inst mem unit
+    input logic [DATA_W-1:0]debug_inst_data1, 
+    input logic [DATA_W-1:0]debug_inst_data2, 
+
+
     output logic [6:0] opcode,
     output logic [6:0] Funct7,
     output logic [2:0] Funct3,
@@ -91,13 +71,13 @@ mem_wb_reg D;
 // next PC
     adder #(9) pcadd(PC, 9'b100, PCPlus4);
     mux2 #(9) pcmux(PCPlus4, BrPC[PC_W-1:0], PcSel, Next_PC);
-    flopr #(9) pcreg(clk, reset, Next_PC, Reg_Stall, PC);
-    instructionmemory instr_mem (clk, PC, Instr);
-
+    flopr #(9) pcreg(clk, reset || (enable_debug), Next_PC, Reg_Stall, PC);
+    instructionmemory instr_mem (clk, enable_debug, PC, debug_inst_addr, debug_inst_data1, debug_inst_data2, Instr);
+ 
 // IF_ID_Reg A;
     always @(posedge clk) 
     begin
-        if ((reset) || (PcSel))   // initialization or flush
+        if ((reset) || (PcSel) || (enable_debug) )   // initialization or flush
         begin
             A.Curr_Pc <= 0;
             A.Curr_Instr <= 0;
@@ -115,7 +95,7 @@ mem_wb_reg D;
     // //Register File
     assign opcode = A.Curr_Instr[6:0];
 
-    RegFile rf(clk, reset, D.RegWrite, D.rd, A.Curr_Instr[19:15], A.Curr_Instr[24:20],
+    RegFile rf(clk, reset || (enable_debug), D.RegWrite, D.rd, A.Curr_Instr[19:15], A.Curr_Instr[24:20],
             WRMuxResult, Reg1, Reg2);
 
     assign reg_num = D.rd;
@@ -128,7 +108,7 @@ mem_wb_reg D;
 // ID_EX_Reg B;
     always @(posedge clk) 
     begin
-        if ((reset) || (Reg_Stall) || (PcSel))   // initialization or flush or generate a NOP if hazard
+        if ((reset) || (Reg_Stall) || (PcSel) || (enable_debug))   // initialization or flush or generate a NOP if hazard
         begin
             B.ALUSrc <= 0;
             B.MemtoReg <= 0;
@@ -148,7 +128,7 @@ mem_wb_reg D;
             B.ImmG <= 0;
             B.func3 <= 0;
             B.func7 <= 0;
-             B.Curr_Instr <= A.Curr_Instr;   //debug tmp
+            B.Curr_Instr <= A.Curr_Instr;   //debug tmp
         end
         else
         begin
@@ -170,7 +150,7 @@ mem_wb_reg D;
             B.ImmG <= ExtImm;
             B.func3 <= A.Curr_Instr[14:12];
             B.func7 <= A.Curr_Instr[31:25];
-             B.Curr_Instr <= A.Curr_Instr;   //debug tmp
+            B.Curr_Instr <= A.Curr_Instr;   //debug tmp
         end
     end
 
@@ -191,7 +171,7 @@ mem_wb_reg D;
 // EX_MEM_Reg C;
     always @(posedge clk) 
     begin
-        if (reset)   // initialization
+        if (reset || (enable_debug))   // initialization
         begin
             C.RegWrite <= 0;
             C.MemtoReg <= 0;
@@ -222,12 +202,19 @@ mem_wb_reg D;
             C.rd <= B.rd;
             C.func3 <= B.func3;
             C.func7 <= B.func7;
-             C.Curr_Instr <= B.Curr_Instr;   // debug tmp
+            C.Curr_Instr <= B.Curr_Instr;   // debug tmp
         end
     end
 
-    // // // // Data memory 
-	datamemory data_mem (clk, C.MemRead, C.MemWrite, C.Alu_Result[8:0], C.RD_Two, C.func3, ReadData);
+    // // // // Data memory
+	assign MemRead = (enable_debug == 1'b1) ? 1'b0 : C.MemRead;
+	assign MemWrite = (enable_debug == 1'b1) ? 1'b1 : C.MemWrite;
+	logic [DM_ADDRESS-1:0]MemAddr = (enable_debug == 1'b1) ? DebugAddress[8:0] : C.Alu_Result[8:0];
+	logic [DATA_W-1:0]MemWrData1 = (enable_debug == 1'b1) ? DebugData1[31:0] : C.RD_Two;
+	logic [DATA_W-1:0]MemWrData2 = (enable_debug == 1'b1) ? DebugData2[31:0] : {{32{1'b0}}};
+	logic [2:0] MemFunc3 = (enable_debug == 1'b1) ? 3'b011 : C.func3; //make a parameter
+
+	datamemory data_mem (clk, enable_debug, MemRead, MemWrite, MemAddr, MemWrData1, MemWrData2, MemFunc3, ReadData);
 
     assign wr = C.MemWrite;
     assign reade = C.MemRead;
@@ -238,7 +225,7 @@ mem_wb_reg D;
 // MEM_WB_Reg D;
     always @(posedge clk) 
     begin
-        if (reset)   // initialization
+        if (reset || (enable_debug))   // initialization
         begin
             D.RegWrite <= 0;
             D.MemtoReg <= 0;
@@ -261,7 +248,7 @@ mem_wb_reg D;
             D.Alu_Result <= C.Alu_Result;
             D.MemReadData <= ReadData;
             D.rd <= C.rd;
-             D.Curr_Instr <= C.Curr_Instr;   //Debug Tmp
+            D.Curr_Instr <= C.Curr_Instr;   //Debug Tmp
         end
     end
 

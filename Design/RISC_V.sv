@@ -1,10 +1,21 @@
 `timescale 1ns / 1ps
 
 module riscv #(
-    parameter DATA_W = 32
+    parameter DATA_W = 32, // Data WriteData
+    parameter DM_ADDRESS = 9 // Data Memory Address
 ) (
     input logic clk,
     reset,  // clock and reset signals
+	enable_debug, // debug enable 
+
+    input logic [DM_ADDRESS-1:0]DebugAddress, // debug and init mem unit
+    input logic [DATA_W-1:0]DebugData1, 
+    input logic [DATA_W-1:0]DebugData2, 
+
+    input logic [DM_ADDRESS-1:0]debug_inst_addr, // debug and init inst mem unit
+    input logic [DATA_W-1:0]debug_inst_data1, 
+    input logic [DATA_W-1:0]debug_inst_data2, 
+
     output logic [31:0] WB_Data,  // The ALU_Result
 
     output logic [4:0] reg_num,
@@ -48,9 +59,12 @@ module riscv #(
       Operation
   );
 
+
+
   Datapath dp (
       clk,
       reset,
+      enable_debug, // debug and init mem
       RegWrite,
       MemtoReg,
       ALUSrc,
@@ -61,6 +75,12 @@ module riscv #(
       ALUop,
       RWSel,
       Operation,
+      DebugAddress,
+      DebugData1,
+      DebugData2,
+      debug_inst_addr, // debug and init inst mem unit
+      debug_inst_data1, 
+      debug_inst_data2, 
       opcode,
       Funct7,
       Funct3,
