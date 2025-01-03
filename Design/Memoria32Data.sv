@@ -34,7 +34,7 @@ module Memoria32Data
     );
     
 
-    reg [11:0] readUsefullAddress = raddress[11:0];
+    wire [11:0] readUsefullAddress = raddress[11:0];
 
     // Declare the address registers instead of wires
     reg [11:0] addS0, addS1, addS2, addS3;
@@ -91,10 +91,10 @@ module Memoria32Data
                 addS2 = readUsefullAddress >> 2;
                 addS3 = (readUsefullAddress + 1) >> 2;
 
-                inS0 = Datain[31:24];
-                inS3 = Datain[23:16];
-                inS2 = Datain[15:8];
-                inS1 = Datain[7:0];
+                inS1 = Datain[31:24];
+                inS0 = Datain[23:16];
+                inS3 = Datain[15:8];
+                inS2 = Datain[7:0];
 
 		Wr0 = ~Wr[2];
 		Wr1 = ~Wr[3];
@@ -124,19 +124,19 @@ module Memoria32Data
     // Ensure you have the necessary dpram4096x8 modules
     dpram4096x8 memBlock0 (
         .A1(addS0), .A2(addS0), .CEB1(Clk), .CEB2(Clk), .WEB1(Wr0), .WEB2(1'b1),
-        .OEB1(1'b0), .OEB2(1'b1), .CSB1(1'b0), .CSB2(1'b1), .I1(inS0), .I2(8'b0), .O1(outS0), .O2()
+        .OEB1(1'b0), .OEB2(1'b0), .CSB1(1'b0), .CSB2(1'b0), .I1(inS0), .I2(8'b0), .O1(outS0), .O2()
     );
     dpram4096x8 memBlock1 (
         .A1(addS1), .A2(addS0), .CEB1(Clk), .CEB2(Clk), .WEB1(Wr1), .WEB2(1'b1),
-        .OEB1(1'b0), .OEB2(1'b1), .CSB1(1'b0), .CSB2(1'b1), .I1(inS1), .I2(8'b0), .O1(outS1), .O2()
+        .OEB1(1'b0), .OEB2(1'b0), .CSB1(1'b0), .CSB2(1'b0), .I1(inS1), .I2(8'b0), .O1(outS1), .O2()
     );
     dpram4096x8 memBlock2 (
         .A1(addS2), .A2(addS0), .CEB1(Clk), .CEB2(Clk), .WEB1(Wr2), .WEB2(1'b1),
-        .OEB1(1'b0), .OEB2(1'b1), .CSB1(1'b0), .CSB2(1'b1), .I1(inS2), .I2(8'b0), .O1(outS2), .O2()
+        .OEB1(1'b0), .OEB2(1'b0), .CSB1(1'b0), .CSB2(1'b0), .I1(inS2), .I2(8'b0), .O1(outS2), .O2()
     );
     dpram4096x8 memBlock3 (
         .A1(addS3), .A2(addS0), .CEB1(Clk), .CEB2(Clk), .WEB1(Wr3), .WEB2(1'b1),
-        .OEB1(1'b0), .OEB2(1'b1), .CSB1(1'b0), .CSB2(1'b1), .I1(inS3), .I2(8'b0), .O1(outS3), .O2()
+        .OEB1(1'b0), .OEB2(1'b0), .CSB1(1'b0), .CSB2(1'b0), .I1(inS3), .I2(8'b0), .O1(outS3), .O2()
     );
 
 endmodule
