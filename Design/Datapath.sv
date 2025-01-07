@@ -207,14 +207,14 @@ mem_wb_reg D;
     end
 
     // // // // Data memory
-	assign MemRead = (enable_debug == 1'b1) ? 1'b0 : C.MemRead;
-	assign MemWrite = (enable_debug == 1'b1) ? 1'b1 : C.MemWrite;
-	logic [DM_ADDRESS-1:0]MemAddr = (enable_debug == 1'b1) ? DebugAddress[8:0] : C.Alu_Result[8:0];
-	logic [DATA_W-1:0]MemWrData1 = (enable_debug == 1'b1) ? DebugData1[31:0] : C.RD_Two;
-	logic [DATA_W-1:0]MemWrData2 = (enable_debug == 1'b1) ? DebugData2[31:0] : {{32{1'b0}}};
-	logic [2:0] MemFunc3 = (enable_debug == 1'b1) ? 3'b011 : C.func3; //make a parameter
+	wire MemReadDebug = (enable_debug == 1'b1) ? 1'b0 : C.MemRead;
+	wire MemWriteDebug = (enable_debug == 1'b1) ? 1'b1 : C.MemWrite;
+	wire [DM_ADDRESS-1:0]MemAddr = (enable_debug == 1'b1) ? DebugAddress[8:0] : C.Alu_Result[8:0];
+	wire [DATA_W-1:0]MemWrData1 = (enable_debug == 1'b1) ? DebugData1[31:0] : C.RD_Two;
+	wire [DATA_W-1:0]MemWrData2 = (enable_debug == 1'b1) ? DebugData2[31:0] : {{32{1'b0}}};
+	wire [2:0] MemFunc3 = (enable_debug == 1'b1) ? 3'b011 : C.func3; //make a parameter
 
-	datamemory data_mem (clk, enable_debug, MemRead, MemWrite, MemAddr, MemWrData1, MemWrData2, MemFunc3, ReadData);
+	datamemory data_mem (clk, enable_debug, MemReadDebug, MemWriteDebug, MemAddr, MemWrData1, MemWrData2, MemFunc3, ReadData);
 
     assign wr = C.MemWrite;
     assign reade = C.MemRead;
