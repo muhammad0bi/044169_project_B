@@ -7,7 +7,7 @@ module Memoria32Data
      input  wire  [31:0]Datain2,
      output wire  [31:0]Dataout,
      input  wire  [3:0]Wr,
-     input  wire  enable_debug
+     input  wire  enable_load_ex_mem
     );
     
 
@@ -32,7 +32,7 @@ module Memoria32Data
                      {outS2, outS1, outS0, outS3};
 
     always_comb begin
-      if (enable_debug) begin
+      if (enable_load_ex_mem) begin
 			addS0 = usefullAddress >> 2;
 			addS1 = (usefullAddress + 1) >> 2;
 			addS2 = (usefullAddress + 2) >> 2;

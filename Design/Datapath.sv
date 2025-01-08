@@ -10,9 +10,9 @@ module Datapath #(
     parameter DM_ADDRESS = 9, // Data Memory Address
     parameter ALU_CC_W = 4 // ALU Control Code Width
     )(
-    input logic clk , reset , enable_debug, // global clock
+    input logic clk , reset , enable_load_ex_mem, // global clock
                               // reset , sets the PC to zero
-                              //debug and init mem unit
+                              //init mem units
     RegWrite , MemtoReg ,     // Register file writing enable   // Memory or ALU MUX
     ALUsrc , MemWrite ,       // Register file or Immediate MUX // Memroy Writing Enable
     MemRead ,                 // Memroy Reading Enable
@@ -22,13 +22,13 @@ module Datapath #(
     input logic [1:0] RWSel , // Mux4to1 Select
     input logic [ALU_CC_W -1:0] ALU_CC, // ALU Control Code ( input of the ALU )
 	
-    input logic [DM_ADDRESS-1:0]DebugAddress, // debug and init mem unit
-    input logic [DATA_W-1:0]DebugData1, 
-    input logic [DATA_W-1:0]DebugData2, 
+    input logic [DM_ADDRESS-1:0]DataExMemAddress, // debug and init mem unit
+    input logic [DATA_W-1:0]DataExMemData1, 
+    input logic [DATA_W-1:0]DataExMemData2, 
 
-    input logic [DM_ADDRESS-1:0]debug_inst_addr, // debug and init inst mem unit
-    input logic [DATA_W-1:0]debug_inst_data1, 
-    input logic [DATA_W-1:0]debug_inst_data2, 
+    input logic [DM_ADDRESS-1:0]InstExMemAddress, // debug and init inst mem unit
+    input logic [DATA_W-1:0]InstExMemData1, 
+    input logic [DATA_W-1:0]InstExMemData2, 
 
 
     output logic [6:0] opcode,
@@ -71,13 +71,13 @@ mem_wb_reg D;
 // next PC
     adder #(9) pcadd(PC, 9'b100, PCPlus4);
     mux2 #(9) pcmux(PCPlus4, BrPC[PC_W-1:0], PcSel, Next_PC);
-    flopr #(9) pcreg(clk, reset || (enable_debug), Next_PC, Reg_Stall, PC);
-    instructionmemory instr_mem (clk, enable_debug, PC, debug_inst_addr, debug_inst_data1, debug_inst_data2, Instr);
+    flopr #(9) pcreg(clk, reset || (enable_load_ex_mem), Next_PC, Reg_Stall, PC);
+    instructionmemory instr_mem (clk, enable_load_ex_mem, PC, InstExMemAddress, InstExMemData1, InstExMemData2, Instr);
  
 // IF_ID_Reg A;
     always @(posedge clk) 
     begin
-        if ((reset) || (PcSel) || (enable_debug) )   // initialization or flush
+        if ((reset) || (PcSel) || (enable_load_ex_mem) )   // initialization or flush
         begin
             A.Curr_Pc <= 0;
             A.Curr_Instr <= 0;
@@ -95,7 +95,7 @@ mem_wb_reg D;
     // //Register File
     assign opcode = A.Curr_Instr[6:0];
 
-    RegFile rf(clk, reset || (enable_debug), D.RegWrite, D.rd, A.Curr_Instr[19:15], A.Curr_Instr[24:20],
+    RegFile rf(clk, reset || (enable_load_ex_mem), D.RegWrite, D.rd, A.Curr_Instr[19:15], A.Curr_Instr[24:20],
             WRMuxResult, Reg1, Reg2);
 
     assign reg_num = D.rd;
@@ -108,7 +108,7 @@ mem_wb_reg D;
 // ID_EX_Reg B;
     always @(posedge clk) 
     begin
-        if ((reset) || (Reg_Stall) || (PcSel) || (enable_debug))   // initialization or flush or generate a NOP if hazard
+        if ((reset) || (Reg_Stall) || (PcSel) || (enable_load_ex_mem))   // initialization or flush or generate a NOP if hazard
         begin
             B.ALUSrc <= 0;
             B.MemtoReg <= 0;
@@ -171,7 +171,7 @@ mem_wb_reg D;
 // EX_MEM_Reg C;
     always @(posedge clk) 
     begin
-        if (reset || (enable_debug))   // initialization
+        if (reset || (enable_load_ex_mem))   // initialization
         begin
             C.RegWrite <= 0;
             C.MemtoReg <= 0;
@@ -207,14 +207,14 @@ mem_wb_reg D;
     end
 
     // // // // Data memory
-	wire MemReadDebug = (enable_debug == 1'b1) ? 1'b0 : C.MemRead;
-	wire MemWriteDebug = (enable_debug == 1'b1) ? 1'b1 : C.MemWrite;
-	wire [DM_ADDRESS-1:0]MemAddr = (enable_debug == 1'b1) ? DebugAddress[8:0] : C.Alu_Result[8:0];
-	wire [DATA_W-1:0]MemWrData1 = (enable_debug == 1'b1) ? DebugData1[31:0] : C.RD_Two;
-	wire [DATA_W-1:0]MemWrData2 = (enable_debug == 1'b1) ? DebugData2[31:0] : {{32{1'b0}}};
-	wire [2:0] MemFunc3 = (enable_debug == 1'b1) ? 3'b011 : C.func3; //make a parameter
+	wire MemReadExternalLoad = (enable_load_ex_mem == 1'b1) ? 1'b0 : C.MemRead;
+	wire MemWriteExternalLoad = (enable_load_ex_mem == 1'b1) ? 1'b1 : C.MemWrite;
+	wire [DM_ADDRESS-1:0]MemAddr = (enable_load_ex_mem == 1'b1) ? DataExMemAddress[8:0] : C.Alu_Result[8:0];
+	wire [DATA_W-1:0]MemWrData1 = (enable_load_ex_mem == 1'b1) ? DataExMemData1[31:0] : C.RD_Two;
+	wire [DATA_W-1:0]MemWrData2 = (enable_load_ex_mem == 1'b1) ? DataExMemData2[31:0] : {{32{1'b0}}};
+	wire [2:0] MemFunc3 = (enable_load_ex_mem == 1'b1) ? 3'b011 : C.func3; //make a parameter
 
-	datamemory data_mem (clk, enable_debug, MemReadDebug, MemWriteDebug, MemAddr, MemWrData1, MemWrData2, MemFunc3, ReadData);
+	datamemory data_mem (clk, enable_load_ex_mem, MemReadExternalLoad, MemWriteExternalLoad, MemAddr, MemWrData1, MemWrData2, MemFunc3, ReadData);
 
     assign wr = C.MemWrite;
     assign reade = C.MemRead;
@@ -225,7 +225,7 @@ mem_wb_reg D;
 // MEM_WB_Reg D;
     always @(posedge clk) 
     begin
-        if (reset || (enable_debug))   // initialization
+        if (reset || (enable_load_ex_mem))   // initialization
         begin
             D.RegWrite <= 0;
             D.MemtoReg <= 0;

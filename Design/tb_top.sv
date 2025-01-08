@@ -3,15 +3,15 @@
 module tb_top;
 
   //clock and reset signal declaration
-  logic tb_clk, reset, enable_debug; // debug enable 
+  logic tb_clk, reset, enable_load_ex_mem; // external memory loading enable  
 
-  logic [8:0]DebugAddress; // debug and init mem unit
-  logic [31:0]DebugData1; 
-  logic [31:0]DebugData2; 
+  logic [8:0]DataExMemAddress; // init data mem unit
+  logic [31:0]DataExMemData1; 
+  logic [31:0]DataExMemData2; 
 
-  logic [8:0]debug_inst_addr; // debug and init inst mem unit
-  logic [31:0]debug_inst_data1; 
-  logic [31:0]debug_inst_data2; 
+  logic [8:0]InstExMemAddress; // init inst mem unit
+  logic [31:0]InstExMemData1; 
+  logic [31:0]InstExMemData2; 
 
   logic [31:0] tb_WB_Data;
   logic [4:0] reg_num;
@@ -30,13 +30,13 @@ module tb_top;
   riscv riscV (
       .clk(tb_clk),
       .reset(reset),
-      .enable_debug(enable_debug), // debug enable 
-      .DebugAddress(DebugAddress), // debug and init mem unit
-      .DebugData1(DebugData1), 
-      .DebugData2(DebugData2), 
-      .debug_inst_addr(debug_inst_addr), // debug and init inst mem unit
-      .debug_inst_data1(debug_inst_data1), 
-      .debug_inst_data2(debug_inst_data2), 
+      .enable_load_ex_mem(enable_load_ex_mem), // debug enable 
+      .DataExMemAddress(DataExMemAddress), // debug and init mem unit
+      .DataExMemData1(DataExMemData1), 
+      .DataExMemData2(DataExMemData2), 
+      .InstExMemAddress(InstExMemAddress), // debug and init inst mem unit
+      .InstExMemData1(InstExMemData1), 
+      .InstExMemData2(InstExMemData2), 
       .WB_Data(tb_WB_Data),
       .reg_num(reg_num),
       .reg_data(reg_data),
@@ -53,19 +53,19 @@ module tb_top;
     reset  = 1;
     @(posedge tb_clk);
     reset = 0;
-    enable_debug = 1'b1;
-    debug_inst_addr = 9'b0;
-    debug_inst_data1 = 32'b00000000000100000000001110010011;
-    debug_inst_data2 = 32'b00000000000000111000001100000011;
-    DebugAddress = 9'b0;; // debug and init mem unit
-    DebugData1 = 32'b00000000000000001000111100000000; 
-    DebugData2 = 32'b00000000000000000000000011111111;
+    enable_load_ex_mem = 1'b1;
+    InstExMemAddress = 9'b0;
+    InstExMemData1 = 32'b00000000000100000000001110010011;
+    InstExMemData2 = 32'b00000000000000111000001100000011;
+    DataExMemAddress = 9'b0;; // debug and init mem unit
+    DataExMemData1 = 32'b00000000000000001000111100000000; 
+    DataExMemData2 = 32'b00000000000000000000000011111111;
     #(CLKPERIOD);
     reset  = 1; 
 
     #(CLKPERIOD);
     reset  = 0; 
-    enable_debug = 1'b0;
+    enable_load_ex_mem = 1'b0;
     #(CLKPERIOD * NUM_CYCLES);
 
     $stop;

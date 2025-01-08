@@ -5,7 +5,7 @@ module datamemory #(
     parameter DATA_W = 32
 ) (
     input logic clk,
-    input logic enable_debug,
+    input logic enable_load_ex_mem,
     input logic MemRead,  // comes from control unit
     input logic MemWrite,  // Comes from control unit
     input logic [DM_ADDRESS - 1:0] a,  // Read / Write address - 9 LSB bits of the ALU output
@@ -28,7 +28,7 @@ module datamemory #(
       .Datain2(Datain2), // used in debug to speed up mem init
       .Dataout(Dataout),
       .Wr(Wr),
-      .enable_debug(enable_debug)
+      .enable_load_ex_mem(enable_load_ex_mem)
   );
 
 
