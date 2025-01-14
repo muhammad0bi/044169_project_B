@@ -30,23 +30,37 @@ module Datapath #(
     input logic [DATA_W-1:0]InstExMemData1, 
     input logic [DATA_W-1:0]InstExMemData2, 
 
-
+	// debug signals fetch stage
     output logic [6:0] opcode,
+    output logic [PC_W-1:0] PC_debug,
+
+	// debug signals decode stage
     output logic [6:0] Funct7,
     output logic [2:0] Funct3,
-    output logic [1:0] ALUOp_Current,
-    output logic [DATA_W-1:0] WB_Data, //Result After the last MUX
-    
-    // Para depuração no tesbench:
-    output logic [4:0] reg_num, //número do registrador que foi escrito
-    output logic [DATA_W-1:0] reg_data,   //valor que foi escrito no registrador
-    output logic reg_write_sig, //sinal de escrita no registrador
 
+	// debug signals exucute stage
+    output logic [1:0] ALUOp_Current,
+    output logic [DATA_W-1:0] ALUResult_debug,
+    output logic PcSel_debug,
+    output logic [PC_W-1:0] BrPC_debug,
+    output logic [DATA_W-1:0] FAmux_Result_debug,
+    output logic [DATA_W-1:0] SrcB_debug,
+
+
+    
+	// debug signals Mem fetch stage
     output logic wr, // write enable
     output logic reade, // read enable
     output logic [DM_ADDRESS-1:0] addr, // address
     output logic [DATA_W-1:0] wr_data, // write data
-    output logic [DATA_W-1:0] rd_data // read data
+    output logic [DATA_W-1:0] rd_data, // read data
+
+    // Para depuração no tesbench:
+    // used also for wr stage
+    output logic [4:0] reg_num, //número do registrador que foi escrito
+    output logic [DATA_W-1:0] reg_data,   //valor que foi escrito no registrador
+    output logic reg_write_sig, //sinal de escrita no registrador
+    output logic [DATA_W-1:0] WB_Data //Result After the last MUX
     );
 
 logic [PC_W-1:0] PC, PCPlus4, Next_PC;
@@ -68,12 +82,14 @@ id_ex_reg B;
 ex_mem_reg C;
 mem_wb_reg D;
 
+
 // next PC
+    assign PC_debug = PC;
     adder #(9) pcadd(PC, 9'b100, PCPlus4);
     mux2 #(9) pcmux(PCPlus4, BrPC[PC_W-1:0], PcSel, Next_PC);
     flopr #(9) pcreg(clk, reset || (enable_load_ex_mem), Next_PC, Reg_Stall, PC);
     instructionmemory instr_mem (clk, enable_load_ex_mem, PC, InstExMemAddress, InstExMemData1, InstExMemData2, Instr);
- 
+
 // IF_ID_Reg A;
     always @(posedge clk) 
     begin
@@ -161,12 +177,19 @@ mem_wb_reg D;
     assign Funct7 = B.func7;
     assign Funct3 = B.func3;
     assign ALUOp_Current = B.ALUOp;
+    assign ALUResult_debug = ALUResult;
+    assign PcSel_debug = PcSel;
+    assign BrPC_debug = BrPC;
+    assign FAmux_Result_debug = FAmux_Result;
+    assign SrcB_debug = SrcB;
 
     mux4 #(32) FAmux(B.RD_One, WRMuxResult, C.Alu_Result, B.RD_One, FAmuxSel, FAmux_Result);
     mux4 #(32) FBmux(B.RD_Two, WRMuxResult, C.Alu_Result, B.RD_Two, FBmuxSel, FBmux_Result);
     mux2 #(32) srcbmux(FBmux_Result, B.ImmG, B.ALUSrc, SrcB);
     alu alu_module(FAmux_Result, SrcB, ALU_CC, ALUResult);
     BranchUnit #(9) brunit(B.Curr_Pc,B.ImmG,B.JalrSel,B.Branch,ALUResult,BrImm,Old_PC_Four,BrPC,PcSel);
+
+
 
 // EX_MEM_Reg C;
     always @(posedge clk) 
