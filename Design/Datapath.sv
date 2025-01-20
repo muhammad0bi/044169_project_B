@@ -26,9 +26,9 @@ module Datapath #(
     input logic [DATA_W-1:0]DataExMemData1, 
     input logic [DATA_W-1:0]DataExMemData2, 
 
-    input logic [DM_ADDRESS-1:0]InstExMemAddress, // debug and init inst mem unit
-    input logic [DATA_W-1:0]InstExMemData1, 
-    input logic [DATA_W-1:0]InstExMemData2, 
+    input logic [PC_W-1:0]InstExMemAddress, // debug and init inst mem unit
+    input logic [INS_W-1:0]InstExMemData1, 
+    input logic [INS_W-1:0]InstExMemData2, 
 
 	// debug signals fetch stage
     output logic [6:0] opcode,
@@ -57,7 +57,7 @@ module Datapath #(
 
     // Para depuração no tesbench:
     // used also for wr stage
-    output logic [4:0] reg_num, //número do registrador que foi escrito
+    output logic [RF_ADDRESS-1:0] reg_num, //número do registrador que foi escrito
     output logic [DATA_W-1:0] reg_data,   //valor que foi escrito no registrador
     output logic reg_write_sig, //sinal de escrita no registrador
     output logic [DATA_W-1:0] WB_Data //Result After the last MUX
@@ -232,16 +232,16 @@ mem_wb_reg D;
     // // // // Data memory
 	wire MemReadExternalLoad = (enable_load_ex_mem == 1'b1) ? 1'b0 : C.MemRead;
 	wire MemWriteExternalLoad = (enable_load_ex_mem == 1'b1) ? 1'b1 : C.MemWrite;
-	wire [DM_ADDRESS-1:0]MemAddr = (enable_load_ex_mem == 1'b1) ? DataExMemAddress[8:0] : C.Alu_Result[8:0];
-	wire [DATA_W-1:0]MemWrData1 = (enable_load_ex_mem == 1'b1) ? DataExMemData1[31:0] : C.RD_Two;
-	wire [DATA_W-1:0]MemWrData2 = (enable_load_ex_mem == 1'b1) ? DataExMemData2[31:0] : {{32{1'b0}}};
+	wire [DM_ADDRESS-1:0]MemAddr = (enable_load_ex_mem == 1'b1) ? DataExMemAddress[DM_ADDRESS-1:0] : C.Alu_Result[DM_ADDRESS-1:0];
+	wire [DATA_W-1:0]MemWrData1 = (enable_load_ex_mem == 1'b1) ? DataExMemData1[DATA_W-1:0] : C.RD_Two;
+	wire [DATA_W-1:0]MemWrData2 = (enable_load_ex_mem == 1'b1) ? DataExMemData2[DATA_W-1:0] : {{DATA_W-1{1'b0}}};
 	wire [2:0] MemFunc3 = (enable_load_ex_mem == 1'b1) ? 3'b011 : C.func3; //make a parameter
 
 	datamemory data_mem (clk, enable_load_ex_mem, MemReadExternalLoad, MemWriteExternalLoad, MemAddr, MemWrData1, MemWrData2, MemFunc3, ReadData);
 
     assign wr = C.MemWrite;
     assign reade = C.MemRead;
-    assign addr = C.Alu_Result[8:0];
+    assign addr = C.Alu_Result[DM_ADDRESS-1:0];
     assign wr_data = C.RD_Two;
     assign rd_data = ReadData;
 
