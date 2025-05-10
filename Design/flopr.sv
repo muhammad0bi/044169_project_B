@@ -23,7 +23,7 @@
 
 
 module flopr
-    (input logic clk, reset, enable_debug,
+    (input logic clk, reset, enable_half,
      input logic [8:0] d,
      input logic stall,
      output logic [8:0] q);
@@ -31,7 +31,7 @@ module flopr
 always_ff @(posedge clk, posedge reset)
 begin
         if (reset) q <= 0;
-        else if (!stall & !enable_debug) q<=d;
+        else if (!stall & !enable_half) q<=d;
 end
     
 endmodule

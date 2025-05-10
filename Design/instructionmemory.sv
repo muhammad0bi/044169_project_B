@@ -2,7 +2,7 @@
 
 module instructionmemory (
     input logic clk,  // Clock
-    input logic enable_debug,
+    input logic enable_half,
     input logic enable_load_ex_mem,
     input logic [8:0] raddress,  // Read address of the instruction memory , comes from PC
     input logic [8:0] InstExMemAddress,
@@ -20,7 +20,7 @@ module instructionmemory (
   Memoria32 meminst (
       .address(address),
       .Clk(clk),
-      .enable_debug(enable_debug),
+      .enable_half(enable_half),
       .Datain1(Datain1),
       .Datain2(Datain2),
       .Dataout(DataOut),

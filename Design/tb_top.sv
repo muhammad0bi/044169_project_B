@@ -3,7 +3,7 @@
 module tb_top;
 
   //clock and reset signal declaration
-  logic tb_clk, reset, enable_load_ex_mem, enable_debug; // external memory loading enable  
+  logic tb_clk, reset, enable_load_ex_mem, enable_half; // external memory loading enable  
 
   logic [8:0]DataExMemAddress; // init data mem unit
   logic [31:0]DataExMemData1; 
@@ -24,7 +24,7 @@ module tb_top;
       .clk(tb_clk),
       .reset(reset),
       .enable_load_ex_mem(enable_load_ex_mem), // debug enable 
-      .enable_debug(enable_debug), // enable debug
+      .enable_half(enable_half), // enable debug
       .DataExMemAddress(DataExMemAddress), // debug and init mem unit
       .DataExMemData1(DataExMemData1), 
       .DataExMemData2(DataExMemData2), 
@@ -38,7 +38,7 @@ module tb_top;
   initial begin
     tb_clk = 0;
     reset  = 1;
-    enable_debug = 1'b0;
+    enable_half = 1'b0;
     @(posedge tb_clk);
     reset = 0;
     enable_load_ex_mem = 1'b1;
@@ -56,22 +56,22 @@ module tb_top;
     enable_load_ex_mem = 1'b0;
 
     #(CLKPERIOD * 3);
-    enable_debug = 1'b0;
+    enable_half = 1'b0;
 
     #(CLKPERIOD);
-    enable_debug = 1'b0;
+    enable_half = 1'b0;
 
     #(CLKPERIOD);
-    enable_debug = 1'b0;
+    enable_half = 1'b0;
 
     #(CLKPERIOD * 4);
-    enable_debug = 1'b0;
+    enable_half = 1'b0;
 
     #(CLKPERIOD);
-    enable_debug = 1'b1;
+    enable_half = 1'b1;
 
     #(CLKPERIOD);
-    enable_debug = 1'b0;
+    enable_half = 1'b0;
     #(CLKPERIOD * NUM_CYCLES);
 
 

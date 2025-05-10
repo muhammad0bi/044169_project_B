@@ -4,7 +4,7 @@ module RegFile
    (
    // Inputs 
    input  clk, //clock
-   input enable_debug,
+   input enable_half,
    input  rst,//synchronous reset; if it is asserted (rst=1), all registers are reseted to 0
    input  rg_wrt_en, //write signal
    input  [4:0] rg_wrt_dest, //address of the register that supposed to written into
@@ -23,7 +23,7 @@ logic [31:0] register_file [31:0];
 
 always @( negedge clk ) 
 begin
-    if (!enable_debug)
+    if (!enable_half)
     begin
     if( rst == 1'b1 )
         for (i = 0; i < 32 ; i = i + 1)
