@@ -1,29 +1,27 @@
 `timescale 1ns / 1ps
 
-module datamemory #(
-    parameter DM_ADDRESS = 9,
-    parameter DATA_W = 32
-) (
-    input logic clk,
+module datamemory(
+    input logic clk, enable_debug,
     input logic enable_load_ex_mem,
     input logic MemRead,  // comes from control unit
     input logic MemWrite,  // Comes from control unit
-    input logic [DM_ADDRESS - 1:0] a,  // Read / Write address - 9 LSB bits of the ALU output
-    input logic [DATA_W - 1:0] wd,  // Write Data
-    input logic [DATA_W - 1:0] wd2,  // Write Data - used in debug to speed up mem init
+    input logic [8:0] a,  // Read / Write address - 9 LSB bits of the ALU output
+    input logic [31:0] wd,  // Write Data
+    input logic [31:0] wd2,  // Write Data - used in debug to speed up mem init
     input logic [2:0] Funct3,  // bits 12 to 14 of the instruction
-    output logic [DATA_W - 1:0] rd  // Read Data
+    output logic [31:0] rd  // Read Data
 );
 
-  logic [31:0] address;
+  logic [11:0] address;
   logic [31:0] Datain1;
   logic [31:0] Datain2; // used in debug to speed up mem init
   logic [31:0] Dataout;
-  logic [ 3:0] Wr;
+  logic [3:0] Wr;
 
   Memoria32Data mem32 (
       .address(address),
       .Clk(clk),
+      .enable_debug(enable_debug),
       .Datain1(Datain1),
       .Datain2(Datain2), // used in debug to speed up mem init
       .Dataout(Dataout),
@@ -32,11 +30,12 @@ module datamemory #(
   );
 
 
-  always_comb begin
-    address = {{23{1'b0}}, a}; //allow wrriting to all adresses
-    Datain1 = wd;
-    Datain2 = wd2;
-    Wr = 4'b0000;
+always_comb 
+begin
+    address <= {{2{1'b0}}, a}; //allow wrriting to all adresses
+    Datain1 <= wd;
+    Datain2 <= wd2;
+    Wr <= 4'b0000;
 
     if (MemRead) begin
       case (Funct3)
@@ -69,6 +68,6 @@ module datamemory #(
         end
       endcase
     end
-  end
+end
 
 endmodule

@@ -1,8 +1,9 @@
 `timescale 1 ns / 1 ps
 
 module Memoria32 
-    (input  wire  [31:0]address,
-     input  wire  Clk,         
+    (input  wire  [10:0]address,
+     input  wire  Clk,
+     input  wire  enable_debug,         
      input  wire  [31:0]Datain1,
      input  wire  [31:0]Datain2,
      output wire  [31:0]Dataout,
@@ -28,7 +29,7 @@ module Memoria32
     //SRAM Memory block size 2048 X 32 bit
 	// Ensure you have the necessary dpram2048x32_CB modules
     dpram2048x32_CB inst_memBlock (
-        .A1(addS0), .A2(addS1), .CEB1(Clk), .CEB2(Clk), .WEB1(Wr), .WEB2(Wr),
+        .A1(addS0), .A2(addS1), .CEB1(Clk & !enable_debug), .CEB2(Clk & !enable_debug), .WEB1(Wr), .WEB2(Wr),
         .OEB1(1'b0), .OEB2(1'b0), .CSB1(1'b0), .CSB2(1'b0), .I1(inS0), .I2(inS1), .O1(outS0), .O2()
     );
         

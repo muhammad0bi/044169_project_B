@@ -22,18 +22,16 @@
 //////////////////////////////////////////////////////////////////////////////////
 
 
-module flopr#
-    (parameter WIDTH = 8)
-    (input logic clk, reset,
-     input logic [WIDTH-1:0] d,
+module flopr
+    (input logic clk, reset, enable_debug,
+     input logic [8:0] d,
      input logic stall,
-     output logic [WIDTH-1:0] q);
+     output logic [8:0] q);
 
-    always_ff @(posedge clk, posedge reset)
-    begin
+always_ff @(posedge clk, posedge reset)
+begin
         if (reset) q <= 0;
-        else if (!stall) q<=d;
-    end
-        
+        else if (!stall & !enable_debug) q<=d;
+end
     
 endmodule

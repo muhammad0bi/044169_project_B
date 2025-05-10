@@ -25,16 +25,13 @@
 //////////////////////////////////////////////////////////////////////////////////
 
 
-module alu#(
-        parameter DATA_WIDTH = 32,
-        parameter OPCODE_LENGTH = 4
-        )
+module alu
         (
-        input logic [DATA_WIDTH-1:0]    SrcA,
-        input logic [DATA_WIDTH-1:0]    SrcB,
+        input logic [31:0]    SrcA,
+        input logic [31:0]    SrcB,
 
-        input logic [OPCODE_LENGTH-1:0]    Operation,
-        output logic[DATA_WIDTH-1:0] ALUResult
+        input logic [3:0]    Operation,
+        output logic[31:0] ALUResult
         );
     
         always_comb

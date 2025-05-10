@@ -1,51 +1,21 @@
 `timescale 1ns / 1ps
 
-module riscv #(
-    parameter DATA = 32, // Data width
-    parameter ADDRESS = 9 // Data/Instruction Memory Address width
-) (
+module riscv
+(
     input logic clk,
     reset,  // clock and reset signals
     enable_load_ex_mem, // external memory loading enable 
-    enable_dubug, // enable debug
+    enable_debug, // enable debug
 
-    input logic [ADDRESS-1:0]DataExMemAddress, // debug and init mem unit
-    input logic [DATA-1:0]DataExMemData1, 
-    input logic [DATA-1:0]DataExMemData2, 
+    input logic [8:0]DataExMemAddress, // debug and init mem unit
+    input logic [31:0]DataExMemData1, 
+    input logic [31:0]DataExMemData2, 
 
-    input logic [ADDRESS-1:0]InstExMemAddress, // debug and init inst mem unit
-    input logic [DATA-1:0]InstExMemData1, 
-    input logic [DATA-1:0]InstExMemData2, 
-
-      output logic [6:0]opcodeFetch,
-      output logic [6:0]opcodeDecode,
-      output logic [6:0]opcodeExecute,
-      output logic [6:0]opcodeMem,
-      output logic [6:0]opcodeWb,
-      output logic [ADDRESS-1:0]PC_Dout,
-      output logic [DATA-1:0]FAmux_Dout,
-      output logic [DATA-1:0]SrcB_Dout,
-      output logic [6:0]Funct7Decode_Dout,
-      output logic [2:0]Funct3Decode_Dout,
-      output logic [6:0]Funct7Execute_Dout,
-      output logic [2:0]Funct3Execute_Dout,
-      output logic [6:0]Funct7Mem_Dout,
-      output logic [2:0]Funct3Mem_Dout,
-      output logic [6:0]Funct7Wb_Dout,
-      output logic [2:0]Funct3Wb_Dout,
-      output logic PcSel_Dout,
-      output logic [ADDRESS-1:0]BrPC_Dout,
-      output logic [DATA-1:0]ALUResult_Dout,
-      output logic [3:0]Operation_Dout,
-      output logic [ADDRESS-1:0]addr_Dout,
-      output logic [DATA-1:0]wr_data_Dout,
-      output logic [DATA-1:0]rd_data_Dout,
-      output logic wr_Dout,
-      output logic rd_Dout,
-      output logic [4:0]reg_num_Dout,
-      output logic [DATA-1:0]reg_data_Dout,
-      output logic reg_write_sig_Dout,
-      output logic [DATA-1:0]WB_Data_Dout
+    input logic [8:0]InstExMemAddress, // debug and init inst mem unit
+    input logic [31:0]InstExMemData1, 
+    input logic [31:0]InstExMemData2, 
+    input logic [4:0] DebugSel,
+    output logic [31:0] DebugOutput
 );
 
   logic [6:0] opcode;
@@ -59,21 +29,21 @@ module riscv #(
   logic [3:0] Operation;
   
   logic [4:0] reg_num;
-  logic [DATA-1:0] reg_data;
+  logic [31:0] reg_data;
   logic reg_write_sig;
 
   logic wr;
   logic rd;
-  logic [ADDRESS-1:0] addr;
-  logic [DATA-1:0] wr_data;
-  logic [DATA-1:0] rd_data;
-  logic [ADDRESS-1:0]PC_debug;
-  logic [DATA-1:0]ALUResult_debug;
+  logic [8:0] addr;
+  logic [31:0] wr_data;
+  logic [31:0] rd_data;
+  logic [8:0]PC_debug;
+  logic [31:0]ALUResult_debug;
   logic PcSel_debug;
-  logic [ADDRESS-1:0]BrPC_debug;
-  logic [DATA-1:0]FAmux_Result_debug;
-  logic [DATA-1:0]SrcB_debug;
-  logic [DATA-1:0]WB_Data;
+  logic [8:0]BrPC_debug;
+  logic [31:0]FAmux_Result_debug;
+  logic [31:0]SrcB_debug;
+  logic [31:0]WB_Data;
 
   Controller c (
       opcode,
@@ -98,7 +68,8 @@ module riscv #(
 
 
   Datapath dp (
-      (clk & !enable_dubug) , // DEUBG ENABLE
+      clk, 
+      enable_debug, // DEUBG ENABLE
       reset,
       enable_load_ex_mem, // init mem enable
       RegWrite,
@@ -141,7 +112,6 @@ module riscv #(
   DebugUnit du (
       clk,
       reset,
-      enable_dubug, // input from the user 
       PC_debug,
       opcode,
       FAmux_Result_debug,
@@ -161,35 +131,8 @@ module riscv #(
       reg_data,
       reg_write_sig,
       WB_Data,
-      opcodeFetch,
-      opcodeDecode,
-      opcodeExecute,
-      opcodeMem,
-      opcodeWb,
-      PC_Dout,
-      FAmux_Dout,
-      SrcB_Dout,
-      Funct7Decode_Dout,
-      Funct3Decode_Dout,
-      Funct7Execute_Dout,
-      Funct3Execute_Dout,
-      Funct7Mem_Dout,
-      Funct3Mem_Dout,
-      Funct7Wb_Dout,
-      Funct3Wb_Dout,
-      PcSel_Dout,
-      BrPC_Dout,
-      ALUResult_Dout,
-      Operation_Dout,
-      addr_Dout,
-      wr_data_Dout,
-      rd_data_Dout,
-      wr_Dout,
-      rd_Dout,
-      reg_num_Dout,
-      reg_data_Dout,
-      reg_write_sig_Dout,
-      WB_Data_Dout
+      DebugSel,
+      DebugOutput
   );
 
 endmodule
