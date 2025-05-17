@@ -1,7 +1,7 @@
 `timescale 1ns / 1ps
 
 module datamemory(
-    input logic clk, enable_half,
+    input logic clk, enable_halt,
     input logic enable_load_ex_mem,
     input logic MemRead,  // comes from control unit
     input logic MemWrite,  // Comes from control unit
@@ -21,7 +21,7 @@ module datamemory(
   Memoria32Data mem32 (
       .address(address),
       .Clk(clk),
-      .enable_half(enable_half),
+      .enable_halt(enable_halt),
       .Datain1(Datain1),
       .Datain2(Datain2), // used in debug unit to speed up mem init
       .Dataout(Dataout),

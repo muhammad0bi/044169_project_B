@@ -46,7 +46,7 @@ def create_sv_testbench(instructions, output_file):
         file.write("      .clk(tb_clk),\n")
         file.write("      .reset(reset),\n")
         file.write("      .enable_load_ex_mem(enable_load_ex_mem),\n")
-        file.write("      .enable_half(enable_half), // enable debug\n")
+        file.write("      .enable_halt(enable_halt), // enable debug\n")
         file.write("      .DataExMemAddress(DataExMemAddress),\n")
         file.write("      .DataExMemData1(DataExMemData1),\n")
         file.write("      .DataExMemData2(DataExMemData2),\n")
@@ -59,7 +59,7 @@ def create_sv_testbench(instructions, output_file):
         file.write("  initial begin\n")
         file.write("    tb_clk = 0;\n")
         file.write("    reset  = 1;\n")
-        file.write("    enable_half  = 0;\n")
+        file.write("    enable_halt  = 0;\n")
         
         # Write the instruction loading logic
         address = 0

@@ -3,7 +3,7 @@
 module Memoria32Data
     (input  wire  [11:0]address,// note that waddress = raddress
      input  wire  Clk,   
-     input  wire  enable_half,      
+     input  wire  enable_halt,      
      input  wire  [31:0]Datain1,
      input  wire  [31:0]Datain2,
      output wire  [31:0]Dataout,
@@ -137,19 +137,19 @@ module Memoria32Data
     //SRAM Memory blocks size 4096 X 32 bit (each block has 4096 bytes)
     // Ensure you have the necessary dpram4096x8 modules
     dpram4096x8 memBlock0 (
-        .A1(addS0), .A2(addS0_2), .CEB1(Clk & !enable_half), .CEB2(Clk & !enable_half), .WEB1(Wr0), .WEB2(memory_init),
+        .A1(addS0), .A2(addS0_2), .CEB1(Clk & !enable_halt), .CEB2(Clk & !enable_halt), .WEB1(Wr0), .WEB2(memory_init),
         .OEB1(1'b0), .OEB2(1'b0), .CSB1(1'b0), .CSB2(1'b0), .I1(inS0), .I2(inS0_2), .O1(outS0), .O2()
     );
     dpram4096x8 memBlock1 (
-        .A1(addS1), .A2(addS1_2), .CEB1(Clk & !enable_half), .CEB2(Clk & !enable_half), .WEB1(Wr1), .WEB2(memory_init),
+        .A1(addS1), .A2(addS1_2), .CEB1(Clk & !enable_halt), .CEB2(Clk & !enable_halt), .WEB1(Wr1), .WEB2(memory_init),
         .OEB1(1'b0), .OEB2(1'b0), .CSB1(1'b0), .CSB2(1'b0), .I1(inS1), .I2(inS1_2), .O1(outS1), .O2()
     );
     dpram4096x8 memBlock2 (
-        .A1(addS2), .A2(addS2_2), .CEB1(Clk & !enable_half), .CEB2(Clk & !enable_half), .WEB1(Wr2), .WEB2(memory_init),
+        .A1(addS2), .A2(addS2_2), .CEB1(Clk & !enable_halt), .CEB2(Clk & !enable_halt), .WEB1(Wr2), .WEB2(memory_init),
         .OEB1(1'b0), .OEB2(1'b0), .CSB1(1'b0), .CSB2(1'b0), .I1(inS2), .I2(inS2_2), .O1(outS2), .O2()
     );
     dpram4096x8 memBlock3 (
-        .A1(addS3), .A2(addS3_2), .CEB1(Clk & !enable_half), .CEB2(Clk & !enable_half), .WEB1(Wr3), .WEB2(memory_init),
+        .A1(addS3), .A2(addS3_2), .CEB1(Clk & !enable_halt), .CEB2(Clk & !enable_halt), .WEB1(Wr3), .WEB2(memory_init),
         .OEB1(1'b0), .OEB2(1'b0), .CSB1(1'b0), .CSB2(1'b0), .I1(inS3), .I2(inS3_2), .O1(outS3), .O2()
     );
 

@@ -5,7 +5,7 @@ module riscv
     input logic clk,
     reset,  // clock and reset signals
     enable_load_ex_mem, // external memory loading enable 
-    enable_half, // enable debug
+    enable_halt, // enable debug
 
     input logic [8:0]DataExMemAddress, // debug and init mem unit
     input logic [31:0]DataExMemData1, 
@@ -69,7 +69,7 @@ module riscv
 
   Datapath dp (
       clk, 
-      enable_half, // DEUBG ENABLE
+      enable_halt, // DEUBG ENABLE
       reset,
       enable_load_ex_mem, // init mem enable
       RegWrite,

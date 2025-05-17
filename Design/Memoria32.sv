@@ -3,7 +3,7 @@
 module Memoria32 
     (input  wire  [10:0]address,
      input  wire  Clk,
-     input  wire  enable_half,         
+     input  wire  enable_halt,         
      input  wire  [31:0]Datain1,
      input  wire  [31:0]Datain2,
      output wire  [31:0]Dataout,
@@ -29,7 +29,7 @@ module Memoria32
     //SRAM Memory block size 2048 X 32 bit
 	// Ensure you have the necessary dpram2048x32_CB modules
     dpram2048x32_CB inst_memBlock (
-        .A1(addS0), .A2(addS1), .CEB1(Clk & !enable_half), .CEB2(Clk & !enable_half), .WEB1(Wr), .WEB2(Wr),
+        .A1(addS0), .A2(addS1), .CEB1(Clk & !enable_halt), .CEB2(Clk & !enable_halt), .WEB1(Wr), .WEB2(Wr),
         .OEB1(1'b0), .OEB2(1'b0), .CSB1(1'b0), .CSB2(1'b0), .I1(inS0), .I2(inS1), .O1(outS0), .O2()
     );
         
