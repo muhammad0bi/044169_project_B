@@ -24,8 +24,7 @@
 
 
 module BranchUnit
-    #(parameter PC_W = 9)
-    (input logic [PC_W-1:0] Cur_PC,
+    (input logic [8:0] Cur_PC,
      input logic [31:0] Imm,
      input logic JalrSel,
      input logic Branch,

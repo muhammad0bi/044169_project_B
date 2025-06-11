@@ -20,62 +20,47 @@
 //////////////////////////////////////////////////////////////////////////////////
 
 
-module DebugUnit #(
-    parameter DATA = 32, // Data width
-    parameter ADDRESS = 9 // Data/Instruction Memory Address width
-  )( 
+module DebugUnit
+( 
 	input logic clk,
 	input logic reset,      
-	input logic enable_dubug, // input from the user 
-	input logic [ADDRESS-1:0]PC_debug,
+	input logic [8:0]PC_debug,
 	input logic [6:0]opcode,
-	input logic [DATA-1:0]FAmux_Result_debug,
-	input logic [DATA-1:0]SrcB_debug,
+	input logic [31:0]FAmux_Result_debug,
+	input logic [31:0]SrcB_debug,
 	input logic [6:0]Funct7,
 	input logic [2:0]Funct3,
 	input logic PcSel_debug,
-	input logic [ADDRESS-1:0]BrPC_debug,
-	input logic [DATA-1:0]ALUResult_debug,
+	input logic [8:0]BrPC_debug,
+	input logic [31:0]ALUResult_debug,
 	input logic [3:0]Operation,
-	input logic [ADDRESS-1:0]addr,
-	input logic [DATA-1:0]wr_data,
-	input logic [DATA-1:0]rd_data,
+	input logic [8:0]addr,
+	input logic [31:0]wr_data,
+	input logic [31:0]rd_data,
 	input logic wr,
 	input logic rd,
 	input logic [4:0]reg_num,
-	input logic [DATA-1:0]reg_data,
+	input logic [31:0]reg_data,
 	input logic reg_write_sig,
-	input logic [DATA-1:0]WB_Data,
-	output logic [6:0]opcodeFetch,
-	output logic [6:0]opcodeDecode,
-	output logic [6:0]opcodeExecute,
-	output logic [6:0]opcodeMem,
-	output logic [6:0]opcodeWb,
-	output logic [ADDRESS-1:0]PC_Dout,
-	output logic [DATA-1:0]FAmux_Dout,
-	output logic [DATA-1:0]SrcB_Dout,
-	output logic [6:0]Funct7Decode_Dout,
-	output logic [2:0]Funct3Decode_Dout,
-	output logic [6:0]Funct7Execute_Dout,
-	output logic [2:0]Funct3Execute_Dout,
-	output logic [6:0]Funct7Mem_Dout,
-	output logic [2:0]Funct3Mem_Dout,
-	output logic [6:0]Funct7Wb_Dout,
-	output logic [2:0]Funct3Wb_Dout,
-	output logic PcSel_Dout,
-	output logic [ADDRESS-1:0]BrPC_Dout,
-	output logic [DATA-1:0]ALUResult_Dout,
-	output logic [3:0]Operation_Dout,
-	output logic [ADDRESS-1:0]addr_Dout,
-	output logic [DATA-1:0]wr_data_Dout,
-	output logic [DATA-1:0]rd_data_Dout,
-	output logic wr_Dout,
-	output logic rd_Dout,
-	output logic [4:0]reg_num_Dout,
-	output logic [DATA-1:0]reg_data_Dout,
-	output logic reg_write_sig_Dout,
-	output logic [DATA-1:0]WB_Data_Dout
+	input logic [31:0]WB_Data,
+	
+	input logic [4:0] DebugSel,
+	output logic [31:0] DebugOutput 
 );
+
+	logic [6:0]opcodeFetch;
+	logic [6:0]opcodeDecode;
+        logic [6:0]opcodeExecute;
+	logic [6:0]opcodeMem;
+	logic [6:0]opcodeWb;
+	logic [6:0]Funct7Decode_Dout;
+	logic [2:0]Funct3Decode_Dout;
+	logic [6:0]Funct7Execute_Dout;
+	logic [2:0]Funct3Execute_Dout;
+	logic [6:0]Funct7Mem_Dout;
+	logic [2:0]Funct3Mem_Dout;
+	logic [6:0]Funct7Wb_Dout;
+	logic [2:0]Funct3Wb_Dout;
 
     always @(posedge clk) 
     begin
@@ -108,23 +93,40 @@ module DebugUnit #(
 	end
     end
 
-assign PC_Dout = PC_debug;
-assign FAmux_Dout = FAmux_Result_debug;
-assign SrcB_Dout = SrcB_debug;
-assign PcSel_Dout = PcSel_debug;
-assign BrPC_Dout= BrPC_debug;
-assign ALUResult_Dout = ALUResult_debug;
-assign Operation_Dout = Operation;
-assign addr_Dout = addr;
-assign wr_data_Dout = wr_data;
-assign rd_data_Dout = rd_data;
-assign wr_Dout = wr;
-assign rd_Dout = rd;
-assign reg_num_Dout = reg_num;
-assign reg_data_Dout = reg_data;
-assign reg_write_sig_Dout = reg_write_sig;
-assign WB_Data_Dout = WB_Data;
-
+mux32 DebugMux({25'b0,opcodeFetch},
+		{25'b0,opcodeDecode},
+		{25'b0,opcodeExecute},
+		{25'b0,opcodeMem},
+		{25'b0,opcodeWb},
+		{25'b0,Funct7Decode_Dout},
+		{29'b0,Funct3Decode_Dout},
+		{25'b0,Funct7Execute_Dout},
+		{29'b0,Funct3Execute_Dout},
+		{25'b0,Funct7Mem_Dout},
+		{29'b0,Funct3Mem_Dout},
+		{25'b0,Funct7Wb_Dout},
+		{29'b0,Funct3Wb_Dout},
+		{23'b0,PC_debug},
+		FAmux_Result_debug,
+		SrcB_debug,
+		{31'b0,PcSel_debug},
+		{23'b0,BrPC_debug},
+		ALUResult_debug,
+		{28'b0,Operation},
+		{23'b0,addr},
+		wr_data,
+		rd_data,
+		{31'b0,wr},
+		{31'b0,rd},
+		{27'b0,reg_num},
+		reg_data,
+		{31'b0,reg_write_sig},
+		WB_Data,
+                {32'b0},
+                {32'b0},
+                {32'b0},
+		DebugSel,
+		DebugOutput);
 
 
 endmodule
