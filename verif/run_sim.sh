@@ -1,5 +1,8 @@
 #!/bin/bash
 
+# Generate a file named testbench.sv in the same directory as the script
+python3 assembler.py
+
 # Compile all SystemVerilog and Verilog source files
 xmvlog -sv -nowarn DLCPTH -nocopyright adder.sv
 xmvlog -sv -nowarn DLCPTH -nocopyright dpram2048x32_CB.v
@@ -22,13 +25,13 @@ xmvlog -sv -nowarn DLCPTH -nocopyright mux32.sv
 xmvlog -sv -nowarn DLCPTH -nocopyright datamemory.sv
 xmvlog -sv -nowarn DLCPTH -nocopyright instructionmemory.sv
 xmvlog -sv -nowarn DLCPTH -nocopyright Datapath.sv
-xmvlog -sv -nowarn DLCPTH -nocopyright RISC_V.sv
 xmvlog -sv -nowarn DLCPTH -nocopyright DebugUnit.sv
-xmvlog -sv -nowarn DLCPTH -nocopyright tb_top.sv
+xmvlog -sv -nowarn DLCPTH -nocopyright RISC_V.sv
+xmvlog -sv -nowarn DLCPTH -nocopyright testbench.sv
 
 # Elaborate
-xmelab -access +rwc tb_top
+xmelab -access +rwc testbench
 
 # Run simulation in GUI mode
-xmsim -gui tb_top &
+xmsim -gui testbench &
 
