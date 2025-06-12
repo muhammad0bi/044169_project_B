@@ -529,9 +529,9 @@ def create_sv_testbench(instructions, data, output_file):
     with open(output_file, "w") as file:
         # Write header
         file.write("`timescale 1ns / 1ps\n\n")
-        file.write("module tb_top;\n\n")
+        file.write("module test_bench;\n\n")
         file.write("  // Clock and reset signal declaration\n")
-        file.write("  logic tb_clk, reset, enable_load_ex_mem; // External memory loading enable\n\n")
+        file.write("  logic tb_clk, reset, enable_load_ex_mem, enable_halt; // External memory & instruction loading enable\n\n")
         file.write("  logic [8:0]  InstExMemAddress; // Initialize instruction memory unit\n")
         file.write("  logic [31:0] InstExMemData1;\n")
         file.write("  logic [31:0] InstExMemData2;\n\n")
@@ -606,9 +606,9 @@ def create_sv_testbench(instructions, data, output_file):
 
 # Main function to execute the script
 def main():
-    instructions_input_file = "instructions.txt"
-    data_input_file = "data.mif"
-    output_file = "testbench.sv"
+    instructions_input_file = "../verif/instructions.txt"
+    data_input_file = "../verif/data.mif"
+    output_file = "test_bench.sv"
 
     instructions = read_file(instructions_input_file)
     data = parse_mif_to_32bit_blocks(data_input_file)
