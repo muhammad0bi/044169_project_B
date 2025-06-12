@@ -1,0 +1,285 @@
+
+Power Net Detected:
+        Voltage	    Name
+             0V	    VSSO
+             0V	    VSSC
+             0V	    VSS
+          1.62V	    VDDO
+          1.62V	    VDDC
+          1.62V	    VDD
+Using Power View: SlowView.
+AAE_INFO: opIsDesignInPostRouteState() is 1
+#################################################################################
+# Design Stage: PostRoute
+# Design Name: top
+# Design Mode: 90nm
+# Analysis Mode: MMMC Non-OCV 
+# Parasitics Mode: No SPEF/RCDB 
+# Signoff Settings: SI Off 
+#################################################################################
+Extraction called for design 'top' of instances=264851 and nets=10645 using extraction engine 'preRoute' .
+**WARN: (IMPEXT-3530):	The process node is not set. Use the command setDesignMode -process <process node> prior to extraction for maximum accuracy and optimal automatic threshold setting.
+Type 'man IMPEXT-3530' for more detail.
+PreRoute RC Extraction called for design top.
+RC Extraction called in multi-corner(2) mode.
+RCMode: PreRoute
+      RC Corner Indexes            0       1   
+Capacitance Scaling Factor   : 1.00000 1.00000 
+Resistance Scaling Factor    : 1.00000 1.00000 
+Clock Cap. Scaling Factor    : 1.00000 1.00000 
+Clock Res. Scaling Factor    : 1.00000 1.00000 
+Shrink Factor                : 1.00000
+PreRoute extraction is honoring NDR/Shielding/ExtraSpace for clock nets.
+Using capacitance table file ...
+Updating RC Grid density data for preRoute extraction ...
+Initializing multi-corner capacitance tables ... 
+Initializing multi-corner resistance tables ...
+PreRoute RC Extraction DONE (CPU Time: 0:00:00.3  Real Time: 0:00:00.0  MEM: 2371.785M)
+Calculate delays in BcWc mode...
+Start delay calculation (fullDC) (1 T). (MEM=2344.95)
+Total number of fetched objects 10319
+AAE_INFO: Total number of nets for which stage creation was skipped for all views 0
+End delay calculation. (MEM=2378.89 CPU=0:00:01.2 REAL=0:00:01.0)
+End delay calculation (fullDC). (MEM=2362.36 CPU=0:00:01.6 REAL=0:00:01.0)
+
+Begin Power Analysis
+
+             0V	    VSSO
+             0V	    VSSC
+             0V	    VSS
+          1.62V	    VDDO
+          1.62V	    VDDC
+          1.62V	    VDD
+
+Begin Processing Timing Library for Power Calculation
+
+Ended Processing Timing Library for Power Calculation: (cpu=0:00:00, real=0:00:00, mem(process/total/peak)=2374.03MB/4654.18MB/2374.09MB)
+
+
+
+Begin Processing Power Net/Grid for Power Calculation
+
+Ended Processing Power Net/Grid for Power Calculation: (cpu=0:00:00, real=0:00:00, mem(process/total/peak)=2374.11MB/4654.18MB/2374.12MB)
+
+Begin Processing Timing Window Data for Power Calculation
+
+clk(45.4545MHz) CK: assigning clock clk to net wire_clk
+Ended Processing Timing Window Data for Power Calculation: (cpu=0:00:00, real=0:00:00, mem(process/total/peak)=2376.99MB/4658.18MB/2377.25MB)
+
+Begin Processing User Attributes
+
+Ended Processing User Attributes: (cpu=0:00:00, real=0:00:00, mem(process/total/peak)=2377.54MB/4658.18MB/2377.54MB)
+
+Begin Processing Signal Activity
+
+
+Starting Levelizing
+2025-Jun-12 14:53:53 (2025-Jun-12 11:53:53 GMT)
+2025-Jun-12 14:53:53 (2025-Jun-12 11:53:53 GMT): 10%
+2025-Jun-12 14:53:53 (2025-Jun-12 11:53:53 GMT): 20%
+2025-Jun-12 14:53:53 (2025-Jun-12 11:53:53 GMT): 30%
+2025-Jun-12 14:53:53 (2025-Jun-12 11:53:53 GMT): 40%
+2025-Jun-12 14:53:53 (2025-Jun-12 11:53:53 GMT): 50%
+2025-Jun-12 14:53:53 (2025-Jun-12 11:53:53 GMT): 60%
+2025-Jun-12 14:53:53 (2025-Jun-12 11:53:53 GMT): 70%
+2025-Jun-12 14:53:53 (2025-Jun-12 11:53:53 GMT): 80%
+2025-Jun-12 14:53:53 (2025-Jun-12 11:53:53 GMT): 90%
+
+Finished Levelizing
+2025-Jun-12 14:53:53 (2025-Jun-12 11:53:53 GMT)
+
+Starting Activity Propagation
+2025-Jun-12 14:53:53 (2025-Jun-12 11:53:53 GMT)
+** INFO:  (VOLTUS_POWR-1356): No default input activity has been set. Defaulting to 0.2.
+Use 'set_default_switching_activity -input_activity' command to change the default activity value.
+
+2025-Jun-12 14:53:53 (2025-Jun-12 11:53:53 GMT): 10%
+2025-Jun-12 14:53:53 (2025-Jun-12 11:53:53 GMT): 20%
+2025-Jun-12 14:53:53 (2025-Jun-12 11:53:53 GMT): 30%
+
+Finished Activity Propagation
+2025-Jun-12 14:53:53 (2025-Jun-12 11:53:53 GMT)
+Ended Processing Signal Activity: (cpu=0:00:00, real=0:00:00, mem(process/total/peak)=2379.07MB/4659.18MB/2379.07MB)
+
+Begin Power Computation
+
+      ----------------------------------------------------------
+      # of cell(s) missing both power/leakage table: 0
+      # of cell(s) missing power table: 0
+      # of cell(s) missing leakage table: 0
+      ----------------------------------------------------------
+
+
+
+Starting Calculating power
+2025-Jun-12 14:53:53 (2025-Jun-12 11:53:53 GMT)
+ ... Calculating switching power
+2025-Jun-12 14:53:53 (2025-Jun-12 11:53:53 GMT): 10%
+2025-Jun-12 14:53:53 (2025-Jun-12 11:53:53 GMT): 20%
+2025-Jun-12 14:53:53 (2025-Jun-12 11:53:53 GMT): 30%
+2025-Jun-12 14:53:53 (2025-Jun-12 11:53:53 GMT): 40%
+2025-Jun-12 14:53:53 (2025-Jun-12 11:53:53 GMT): 50%
+ ... Calculating internal and leakage power
+2025-Jun-12 14:53:53 (2025-Jun-12 11:53:53 GMT): 60%
+2025-Jun-12 14:53:53 (2025-Jun-12 11:53:53 GMT): 70%
+2025-Jun-12 14:53:53 (2025-Jun-12 11:53:53 GMT): 80%
+2025-Jun-12 14:53:53 (2025-Jun-12 11:53:53 GMT): 90%
+
+Finished Calculating power
+2025-Jun-12 14:53:53 (2025-Jun-12 11:53:53 GMT)
+      # of MSMV cell(s) missing power_level: 0
+Ended Power Computation: (cpu=0:00:00, real=0:00:00, mem(process/total/peak)=2380.55MB/4659.18MB/2380.55MB)
+
+Begin Processing User Attributes
+
+Begin Processing set_power
+Ended Processing set_power: (cpu=0:00:00, real=0:00:00,
+mem(process/total/peak)=2380.56MB/4659.18MB/2380.63MB)
+Ended Processing User Attributes: (cpu=0:00:00, real=0:00:00, mem(process/total/peak)=2380.63MB/4659.18MB/2380.63MB)
+
+Ended Power Analysis: (cpu=0:00:00, real=0:00:00, mem(process/total/peak)=2380.63MB/4659.18MB/2380.64MB)
+
+Begin Boundary Leakage Calculation
+Ended Boundary Leakage Calculation: (cpu=0:00:00, real=0:00:00,
+mem(process/total/peak)=2380.71MB/4659.18MB/2380.71MB)
+Begin Static Power Report Generation
+*----------------------------------------------------------------------------------------
+*	Innovus 23.33-s082_1 (64bit) 11/13/2024 14:07 (Linux 3.10.0-693.el7.x86_64)
+*	
+*
+* 	Date & Time:	2025-Jun-12 14:53:53 (2025-Jun-12 11:53:53 GMT)
+*
+*----------------------------------------------------------------------------------------
+*
+*	Design: top
+*
+*	Liberty Libraries used:
+*	        SlowView: /users/epprjb/muhammad_test_before_layout/044169_project_B/Design/innovus/top_06.enc.dat/libs/mmmc/tsl18cio150_max.lib
+*	        SlowView: /users/epprjb/muhammad_test_before_layout/044169_project_B/Design/innovus/top_06.enc.dat/libs/mmmc/tsl18fs120_max.lib
+*	        SlowView: /users/epprjb/muhammad_test_before_layout/044169_project_B/Design/innovus/top_06.enc.dat/libs/mmmc/dpram2048x32_CB_max.lib
+*	        SlowView: /users/epprjb/muhammad_test_before_layout/044169_project_B/Design/innovus/top_06.enc.dat/libs/mmmc/dpram4096x8_max.lib
+*
+*	Parasitic Files used:
+*
+*       Power View : SlowView
+*
+*       User-Defined Activity : N.A.
+*
+*       Activity File: N.A.
+*
+*       Hierarchical Global Activity: N.A.
+*
+*       Global Activity: N.A.
+*
+*       Sequential Element Activity: 0.200000
+*
+*       Primary Input Activity: 0.200000
+*
+*       Default icg ratio: N.A.
+*
+*       Global Comb ClockGate Ratio: N.A.
+*
+*	Power Units = 1mW
+*
+*	Time Units = 1e-09 secs
+*
+*       report_power
+*
+-----------------------------------------------------------------------------------------
+  8 instances have no static power
+** WARN:  (VOLTUS_POWR-2152): Instance PAD_G1 (pv0a) has no static power. This might be because either the duty cycle and activity of all the connected nets
+is 0 or the instance is connected to power off rails. If this is not the expected behaviour and static power is required, ensure that the instance is connected
+to power on rails and that the duty cycle and activity of at least one net is not 0.
+
+** WARN:  (VOLTUS_POWR-2152): Instance PAD_G3 (pv0c) has no static power. This might be because either the duty cycle and activity of all the connected nets
+is 0 or the instance is connected to power off rails. If this is not the expected behaviour and static power is required, ensure that the instance is connected
+to power on rails and that the duty cycle and activity of at least one net is not 0.
+
+** WARN:  (VOLTUS_POWR-2152): Instance PAD_I1 (pvda) has no static power. This might be because either the duty cycle and activity of all the connected nets
+is 0 or the instance is connected to power off rails. If this is not the expected behaviour and static power is required, ensure that the instance is connected
+to power on rails and that the duty cycle and activity of at least one net is not 0.
+
+** WARN:  (VOLTUS_POWR-2152): Instance PAD_I3 (pvdc) has no static power. This might be because either the duty cycle and activity of all the connected nets
+is 0 or the instance is connected to power off rails. If this is not the expected behaviour and static power is required, ensure that the instance is connected
+to power on rails and that the duty cycle and activity of at least one net is not 0.
+
+** WARN:  (VOLTUS_POWR-2152): Instance Pcornerlr (pfrelr) has no static power. This might be because either the duty cycle and activity of all the connected nets
+is 0 or the instance is connected to power off rails. If this is not the expected behaviour and static power is required, ensure that the instance is connected
+to power on rails and that the duty cycle and activity of at least one net is not 0.
+
+** WARN:  (VOLTUS_POWR-2152): Instance Pcornerll (pfrelr) has no static power. This might be because either the duty cycle and activity of all the connected nets
+is 0 or the instance is connected to power off rails. If this is not the expected behaviour and static power is required, ensure that the instance is connected
+to power on rails and that the duty cycle and activity of at least one net is not 0.
+
+** WARN:  (VOLTUS_POWR-2152): Instance Pcornerur (pfrelr) has no static power. This might be because either the duty cycle and activity of all the connected nets
+is 0 or the instance is connected to power off rails. If this is not the expected behaviour and static power is required, ensure that the instance is connected
+to power on rails and that the duty cycle and activity of at least one net is not 0.
+
+** WARN:  (VOLTUS_POWR-2152): Instance Pcornerul (pfrelr) has no static power. This might be because either the duty cycle and activity of all the connected nets
+is 0 or the instance is connected to power off rails. If this is not the expected behaviour and static power is required, ensure that the instance is connected
+to power on rails and that the duty cycle and activity of at least one net is not 0.
+
+*
+
+
+
+Total Power
+-----------------------------------------------------------------------------------------
+Total Internal Power:       38.89284587 	   88.4050%
+Total Switching Power:       4.74633040 	   10.7886%
+Total Leakage Power:         0.35478280 	    0.8064%
+Total Power:                43.99395908
+-----------------------------------------------------------------------------------------
+
+
+Group                           Internal   Switching     Leakage       Total  Percentage 
+                                Power      Power         Power         Power  (%)        
+-----------------------------------------------------------------------------------------
+Sequential                         5.779      0.4538    0.005797       6.239       14.18
+Macro                              22.99      0.1838        0.27       23.44       53.29
+IO                                 7.995      0.4939     0.07256       8.562       19.46
+Combinational                      1.899       2.563    0.006268       4.469       10.16
+Clock (Combinational)             0.2305       1.051   0.0001698       1.282       2.914
+Clock (Sequential)                     0           0           0           0           0
+-----------------------------------------------------------------------------------------
+Total                              38.89       4.746      0.3548       43.99         100
+-----------------------------------------------------------------------------------------
+
+
+Rail                  Voltage   Internal   Switching     Leakage       Total  Percentage 
+                                Power      Power         Power         Power  (%)        
+-----------------------------------------------------------------------------------------
+VDD                      1.62      38.89       4.746      0.3548       43.99         100
+
+
+Clock                           Internal   Switching     Leakage       Total  Percentage 
+                                Power      Power         Power         Power  (%)        
+-----------------------------------------------------------------------------------------
+clk                               0.6541       1.054    0.000559       1.708       3.883
+-----------------------------------------------------------------------------------------
+Total                             0.6541       1.054    0.000559       1.708       3.883
+-----------------------------------------------------------------------------------------
+Clock: clk
+Clock Period: 0.022000 usec 
+Clock Toggle Rate:    90.9091 Mhz 
+Clock Static Probability:  0.5000
+  
+ 
+ 
+-----------------------------------------------------------------------------------------
+*	Power Distribution Summary: 
+*              Highest Average Power: I0/dp/instr_mem/meminst/inst_memBlock (dpram2048x32_CB):            8.412
+*              Highest Leakage Power: I0/dp/instr_mem/meminst/inst_memBlock (dpram2048x32_CB):          0.05525
+*                Total Cap:      2.93828e-10 F
+*                Total instances in design:  9121
+*                Total instances in design with no power:     8
+*                Total instances in design with no activty:     8
+
+*                Total Fillers and Decap:     4
+-----------------------------------------------------------------------------------------
+ 
+** INFO:  (VOLTUS_POWR-3465): There are 0 decaps and 4 fillers in the design
+
+Ended Static Power Report Generation: (cpu=0:00:00, real=0:00:00,
+mem(process/total/peak)=2384.68MB/4662.93MB/2384.78MB)
+

@@ -1,0 +1,34 @@
+    Hinst Name                     Module Name                 Inst Count           Total Area
+-------------------------------------------------------------------------------------------
+top                                                                  9121          6170781.233
+  I0                               riscv                             8926          2817031.233
+    I0/ac                          ALUController                       31              435.904
+    I0/c                           Controller                          26              354.368
+    I0/dp                          Datapath                          8278          2802640.129
+      I0/dp/Ext_Imm                imm_Gen                             63             1078.784
+      I0/dp/FAmux                  mux4_0                             106             1721.664
+      I0/dp/FBmux                  mux4_2                             105             1727.936
+      I0/dp/alu_module             alu                               1501            26587.008
+        I0/dp/alu_module/add_45    alu_DW01_add_1                     197             3230.080
+        I0/dp/alu_module/r384      alu_DW01_cmp6_1                    131             2420.992
+        I0/dp/alu_module/sub_53    alu_DW01_sub_1                     200             3261.440
+      I0/dp/brunit                 BranchUnit                         135             2496.256
+        I0/dp/brunit/add_41        BranchUnit_DW01_add_2              101             1894.144
+      I0/dp/data_mem               datamemory                         653          1772271.056
+        I0/dp/data_mem/mem32       Memoria32Data                      557          1769840.656
+          I0/dp/data_mem/mem32/add_51_2 Memoria32Data_DW01_inc_0            12              395.136
+          I0/dp/data_mem/mem32/r419 Memoria32Data_DW01_inc_1            11              360.640
+      I0/dp/detect                 HazardDetection                     15              398.272
+      I0/dp/forunit                ForwardingUnit                      46              969.024
+      I0/dp/instr_mem              instructionmemory                   98           821589.873
+        I0/dp/instr_mem/meminst    Memoria32                           15           820228.849
+      I0/dp/pcadd                  adder                                8              470.400
+        I0/dp/pcadd/add_8          adder_DW01_add_0_DW01_add_9          8              470.400
+      I0/dp/pcmux                  mux2_WIDTH9                          9              225.792
+      I0/dp/pcreg                  flopr                               19              831.040
+      I0/dp/resmux                 mux2_WIDTH32_1                      32              802.816
+      I0/dp/rf                     RegFile                           3697           120472.576
+      I0/dp/srcbmux                mux2_WIDTH32_0                      33              840.448
+      I0/dp/wrsmux                 mux4_1                             100             1680.896
+    I0/du                          DebugUnit                          586            13381.312
+      I0/du/DebugMux               mux32                              419             7197.120
