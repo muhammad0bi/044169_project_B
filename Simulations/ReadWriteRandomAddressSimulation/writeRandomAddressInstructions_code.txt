@@ -1,0 +1,26 @@
+# --- Setup Memory Base Address ---
+addi x5, x0, 151   # x5 = 0x97 (Hexadecimal for 151. This is our base memory address)
+
+# --- Store Bytes into Memory ---
+addi x1, x0, 17    # x1 = 0x11 (Hexadecimal for 17. Value to store)
+sb x1, 0(x5)       # Store 0x11 from x1 at Memory[0x97] (x5 + 0)
+
+addi x2, x0, 34    # x2 = 0x22 (Hexadecimal for 34)
+sb x2, 1(x5)       # Store 0x22 from x2 at Memory[0x98] (x5 + 1)
+
+addi x3, x0, 51    # x3 = 0x33 (Hexadecimal for 51)
+sb x3, 2(x5)       # Store 0x33 from x3 at Memory[0x99] (x5 + 2)
+
+addi x4, x0, 68    # x4 = 0x44 (Hexadecimal for 68)
+sb x4, 3(x5)       # Store 0x44 from x4 at Memory[0x9A] (x5 + 3)
+
+# --- Load Bytes from Memory ---
+lb x1, 0(x5)       # Load byte from Memory[0x97] into x1 (x1 becomes 0x11)
+lb x2, 1(x5)       # Load byte from Memory[0x98] into x2 (x2 becomes 0x22)
+lb x3, 2(x5)       # Load byte from Memory[0x99] into x3 (x3 becomes 0x33)
+lb x4, 3(x5)       # Load byte from Memory[0x9A] into x4 (x4 becomes 0x44)
+
+# --- Final State ---
+# Registers: x1=0x11, x2=0x22, x3=0x33, x4=0x44, x5=0x97
+# Memory: Mem[0x97]=0x11, Mem[0x98]=0x22, Mem[0x99]=0x33, Mem[0x9A]=0x44
+

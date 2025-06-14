@@ -1,0 +1,36 @@
+# --- Calculate Base Memory Address ---
+addi x5, x0, 15    # x5 = 0xF (Initial segment for address calculation)
+slli x5, x5, 8     # x5 = x5 << 0x8 bits (0xF << 0x8 = 0xF00)
+addi x5, x5, 255   # x5 = x5 + 0xFF (0xF00 + 0xFF = 0xFFF)
+slli x5, x5, 2     # x5 = x5 << 0x2 bits (0xFFF << 0x2 = 0x3FFC)
+addi x5, x5, 3     # x5 = x5 + 0x3 (0x3FFC + 0x3 = 0x3FFF)
+                   # x5 now holds 0x3FFF, which is the highest address in our 0x4000-byte space (0x4000 - 0x1).
+
+# --- Store Bytes into Memory (with wrapping) ---
+addi x1, x0, 170   # x1 = 0xAA (First value to store)
+sb x1, 0(x5)       # Store 0xAA from x1 at Memory[(x5 + 0x0) % 0x4000]
+                   # Effective Address: (0x3FFF + 0x0) % 0x4000 = 0x3FFF.
+                   # Memory[0x3FFF] = 0xAA.
+
+addi x1, x0, 187   # x1 = 0xBB (Second value to store, overwriting previous x1)
+sb x1, 1(x5)       # Store 0xBB from x1 at Memory[(x5 + 0x1) % 0x4000]
+                   # Effective Address: (0x3FFF + 0x1) % 0x4000 = 0x4000 % 0x4000 = 0x0.
+                   # Memory[0x0000] = 0xBB.
+
+# --- Load Bytes from Memory (with wrapping and sign-extension) ---
+addi x6, x5, 1     # x6 = x5 + 0x1 (0x3FFF + 0x1 = 0x4000)
+
+lb x2, 0(x6)       # Load byte into x2 from Memory[(x6 + 0x0) % 0x4000]
+                   # Effective Address: (0x4000 + 0x0) % 0x4000 = 0x0.
+                   # Value at Mem[0x0000] is 0xBB.
+                   # x2 = 0xBB (byte value) sign-extended.
+                   # Since 0xBB (binary 10111011) has MSB 1, x2 = 0xFFFFFFBB (assuming 32-bit).
+
+addi x7, x0, -1    # x7 = -0x1 (In 32-bit two's complement, this is 0xFFFFFFFF).
+
+lb x3, 0(x7)       # Load byte into x3 from Memory[(x7 + 0x0) % 0x4000]
+                   # Effective Address: (0xFFFFFFFF + 0x0) % 0x4000 = 0x3FFF.
+                   # Value at Mem[0x3FFF] is 0xAA.
+                   # x3 = 0xAA (byte value) sign-extended.
+                   # Since 0xAA (binary 10101010) has MSB 1, x3 = 0xFFFFFFAA (assuming 32-bit).
+				   

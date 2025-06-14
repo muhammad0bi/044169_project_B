@@ -1,0 +1,33 @@
+# --- Basic Register Initialization ---
+addi x0, x0, 0    # No-op: x0 remains 0x0 (the zero register is hardwired to 0x0).
+addi x1, x0, 8    # Set x1 to 0x8.
+addi x2, x0, 4    # Set x2 to 0x4.
+
+# --- Bitwise Operations ---
+or x3, x1, x2     # x3 = x1 OR x2 (0x8 OR 0x4 = 0xC).
+or x4, x2, x0     # x4 = x2 OR x0 (0x4 OR 0x0 = 0x4. Copy operation).
+
+# --- Arithmetic Operations ---
+add x6, x4, x2    # x6 = x4 + x2 (0x4 + 0x4 = 0x8).
+
+# --- Re-initialize Register ---
+addi x4, x0, 2    # x4 = 0x2 (x4 is updated for shift operations).
+addi x5, x0, -2   # x5 = -0x2 (In 32-bit two's complement, this is 0xFFFFFFFE).
+
+# --- Shift Operations ---
+sll x18, x1, x4   # Shift Left Logical: x18 = x1 << x4 (0x8 << 0x2 = 0x20).
+srl x19, x5, x4   # Shift Right Logical: x19 = x5 >> x4 (unsigned shift).
+                  # For 32-bit: (0xFFFFFFFE) >> 0x2 (logical) = 0x3FFFFFFF.
+sra x20, x5, x4   # Shift Right Arithmetic: x20 = x5 >> x4 (signed shift).
+                  # For 32-bit: (0xFFFFFFFE) >> 0x2 (arithmetic) = 0xFFFFFFFF (which is -0x1).
+
+# --- Comparison Operations (Set Less Than) ---
+slt x21, x1, x2   # Set Less Than (Signed): x21 = 1 if x1 < x2 (signed), else 0.
+                  # Is 0x8 < 0x4? (False) -> x21 = 0x0.
+slt x22, x2, x1   # Set Less Than (Signed): x22 = 1 if x2 < x1 (signed), else 0.
+                  # Is 0x4 < 0x8? (True) -> x22 = 0x1.
+
+sltu x23, x5, x1  # Set Less Than Unsigned: x23 = 1 if x5 < x1 (unsigned), else 0.
+                  # Is 0xFFFFFFFE < 0x8? (False, as 0xFFFFFFFE is a large unsigned number) -> x23 = 0x0.
+sltu x24, x1, x5  # Set Less Than Unsigned: x24 = 1 if x1 < x5 (unsigned), else 0.
+                  # Is 0x8 < 0xFFFFFFFE? (True) -> x24 = 0x1.

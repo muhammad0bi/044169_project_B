@@ -522,16 +522,16 @@ def translate_instruction(instruction):
 
 	return binary
 
-# Function to create the SV testbench file
+# Function to create the SV test_bench file
 # added by omar sharafi, 09/01/2025
-# Function to create the SV testbench file
+# Function to create the SV test_bench file
 def create_sv_testbench(instructions, data, output_file):
     with open(output_file, "w") as file:
         # Write header
         file.write("`timescale 1ns / 1ps\n\n")
         file.write("module test_bench;\n\n")
         file.write("  // Clock and reset signal declaration\n")
-        file.write("  logic tb_clk, reset, enable_load_ex_mem, enable_halt; // External memory & instruction loading enable\n\n")
+        file.write("  logic tb_clk, reset, enable_load_ex_mem, enable_halt; // External memory loading enable\n\n")
         file.write("  logic [8:0]  InstExMemAddress; // Initialize instruction memory unit\n")
         file.write("  logic [31:0] InstExMemData1;\n")
         file.write("  logic [31:0] InstExMemData2;\n\n")
@@ -555,12 +555,13 @@ def create_sv_testbench(instructions, data, output_file):
         file.write("      .InstExMemData1(InstExMemData1),\n")
         file.write("      .InstExMemData2(InstExMemData2),\n")
         file.write("      .DebugSel(DebugSel),\n")
-        file.write("      .DebugOutput(DebugOutput),\n")
+        file.write("      .DebugOutput(DebugOutput)\n")
         file.write("  );\n\n")
         file.write("  initial begin\n")
         file.write("    tb_clk = 0;\n")
         file.write("    reset  = 1;\n")
         file.write("    enable_halt  = 0;\n")
+        file.write("        DebugSel = 5'b11010;\n")
         
         # Write the instruction & data loading logic
         instr_i = 0
@@ -606,14 +607,14 @@ def create_sv_testbench(instructions, data, output_file):
 
 # Main function to execute the script
 def main():
-    instructions_input_file = "../verif/instructions.txt"
-    data_input_file = "../verif/data.mif"
+    instructions_input_file = "instructions.txt"
+    data_input_file = "data.mif"
     output_file = "test_bench.sv"
 
     instructions = read_file(instructions_input_file)
     data = parse_mif_to_32bit_blocks(data_input_file)
     create_sv_testbench(instructions, data, output_file)
-    print(f"Testbench file '{output_file}' created successfully.")
+    print(f"test_bench.sv file '{output_file}' created successfully.")
     print(len(data))
     print(len(instructions))
 
