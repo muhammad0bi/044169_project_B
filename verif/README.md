@@ -28,7 +28,7 @@ refer to the explaination in the top of the `data.mif` file for more info.
 	- data.mif
 	- dpram4096x8.v
 	- dpram2048x32_CB.v
-	- [`assembler.py`]
+	- assembler.py
 
 4.Execute the following command in your terminal:
     ```shell
