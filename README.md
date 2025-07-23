@@ -12,7 +12,7 @@ The repository is structured as follows:
 
 ## Resources
 - For additional information on the Original implementation, please refer to  [https://github.com/estufa-cin-ufpe/RISC-V-Pipeline/tree/master]
-- For additional information on the implementation, code changes and backend results, please refer to the [Final_report.pdf](doc/report.pdf).
+- For additional information on the implementation, code changes and backend results, please refer to the [VLSI project 7880.pdf](doc/report.pdf).
 - To get started with the RISC-V instruction set, please refer to:
   - [The RISC-V Instruction Set Manual Volume I: User-Level ISA - Document Version 2.2](https://riscv.org/wp-content/uploads/2017/05/riscv-spec-v2.2.pdf)
   - [The RISC-V Instruction Set Manual Volume I: Unprivileged ISA - Document Version 20191213](https://riscv.org/wp-content/uploads/2019/12/riscv-spec-20191213.pdf)
