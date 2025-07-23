@@ -26,13 +26,13 @@ refer to the explaination in the top of the `data.mif` file for more info.
 	- run_sim.sh
 	- instructions.txt
 	- data.mif
-	- dpram4096x8.v
-	- dpram2048x32_CB.v
+	- dpram4096x8.v (Can be acquired from tower/change according to the memory module you are using)
+	- dpram2048x32_CB.v (Can be acquired from tower/change according to the memory module you are using)
 	- assembler.py
 
 4.Execute the following command in your terminal:
-    ```shell
-    do ./run_sim.sh
+    ```
+     ./run_sim.sh
     ```
 
 5.A file named test_bench.sv should be generated in the same directory as the run_sim.sh.
