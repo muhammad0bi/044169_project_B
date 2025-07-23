@@ -1,6 +1,6 @@
 `timescale 1ns / 1ps
 
-module tb_top;
+module test_bench;
 
   //clock and reset signal declaration
   logic tb_clk, reset, enable_load_ex_mem, enable_halt; // external memory loading enable  
